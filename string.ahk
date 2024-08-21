@@ -1,21 +1,32 @@
 ; 让字符串具备基本的数组访问行为和可循环可切片的行为
 #Requires AutoHotkey v2.0
 #Include utils.ahk
+
+StrTemp(str, vars*)
+{
+    for var in vars
+        str := StrReplace(str, '{' NameOf(&%var%) '}', %var%)
+    return str
+    ; https://github.com/thqby/ahk2_lib/blob/master/nameof.ahk
+    NameOf(&value) => StrGet(NumGet(ObjPtr(&value) + 8 + 6 * A_PtrSize, 'Ptr'), 'UTF-16')
+}
+
 __DefProp := {}.DefineProp
-__StringPrototype := "".Base
-__DefProp(__StringPrototype, '__Enum', {Call: __StrEnum})
-__DefProp(__StringPrototype, '__Item', {get: __StrItemGet, set: __StrItemSet})
-__DefProp(__StringPrototype, 'Split', {Call: __StrSplit})
-__DefProp(__StringPrototype, 'Length', {get: __StrLength})
-__DefProp(__StringPrototype, 'StartsWith', {Call: __StrStartsWith})
-__DefProp(__StringPrototype, 'EndsWith', {get: __StrEndsWith})
-__DefProp(__StringPrototype, 'Includes', {get: __StrIncludes})
-__DefProp(__StringPrototype, 'IndexOf', {get: __StrIndexOf})
-__DefProp(__StringPrototype, 'Trim', {get: __StrTrim})
-__DefProp(__StringPrototype, 'TrimLeft', {get: __StrTrimLeft})
-__DefProp(__StringPrototype, 'TrimRight', {get: __StrTrimRight})
-__DefProp(__StringPrototype, 'CharCodeAt', {get: __StrCharCodeAt})
-__DefProp(__StringPrototype, 'Code', {get: __StrCharCodeAt})
+__DefProp("".Base, '__Enum', {Call: __StrEnum})
+__DefProp("".Base, '__Item', {get: __StrItemGet, set: __StrItemSet})
+__DefProp("".Base, 'Split', {Call: __StrSplit})
+__DefProp("".Base, 'Length', {get: __StrLength})
+__DefProp("".Base, 'StartsWith', {Call: __StrStartsWith})
+__DefProp("".Base, 'EndsWith', {Call: __StrEndsWith})
+__DefProp("".Base, 'Includes', {Call: __StrIncludes})
+__DefProp("".Base, 'IndexOf', {Call: __StrIndexOf})
+__DefProp("".Base, 'Trim', {Call: __StrTrim})
+__DefProp("".Base, 'TrimLeft', {Call: __StrTrimLeft})
+__DefProp("".Base, 'TrimRight', {Call: __StrTrimRight})
+__DefProp("".Base, 'CharCodeAt', {Call: __StrCharCodeAt})
+__DefProp("".Base, 'Code', {Call: __StrCharCodeAt})
+__DefProp("".Base, 'Concat', {Call: __StrConcat})
+__DefProp("".Base, 'Wrap', {Call: __StrWrap})
 
 
 __StrEnum(str, paramNum) {
@@ -35,6 +46,12 @@ __StrEnum(str, paramNum) {
 }
 
 __StrItemGet(str, params*) {
+    len := StrLen(str)
+    for index, item in params {
+        if item < 0 {
+            params[index] := len + item + 1
+        }
+    }
     if params.Length == 1 {
         return SubStr(str, params[1], 1)
     }else if params.Length == 2 {
@@ -84,6 +101,18 @@ __StrTrimRight(str, v){
 
 }
 
-__StrCharCodeAt(str, v){
+__StrCharCodeAt(str, i){
+    return Ord(str[i])
+}
 
+__StrConcat(str, params*){
+    o := ""
+    for item in params {
+        o := o . item
+    }
+    return o
+}
+
+__StrWrap(str, ch){
+    return ch str ch
 }
