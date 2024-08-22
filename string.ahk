@@ -27,6 +27,8 @@ __DefProp("".Base, 'CharCodeAt', {Call: __StrCharCodeAt})
 __DefProp("".Base, 'Code', {Call: __StrCharCodeAt})
 __DefProp("".Base, 'Concat', {Call: __StrConcat})
 __DefProp("".Base, 'Wrap', {Call: __StrWrap})
+__DefProp("".Base, 'ToString', {Call: __StrToString})
+__DefProp("".Base, 'Replace', {Call: __StrReplace}) ; todo 后面在实现,先想想
 
 
 __StrEnum(str, paramNum) {
@@ -55,7 +57,14 @@ __StrItemGet(str, params*) {
     if params.Length == 1 {
         return SubStr(str, params[1], 1)
     }else if params.Length == 2 {
-        return SubStr(str, params[1], params[2] - params[1] + 1)
+        if params[1] > params[2] {
+            start := params[2]
+            end := params[1]
+        } else {
+            start := params[1]
+            end := params[2]
+        }
+        return SubStr(str, start, end - start + 1)
     }else{
         Throw IndexError("多余的索引")
     }
@@ -73,32 +82,32 @@ __StrLength(str){
     return StrLen(str)
 }
 
-__StrStartsWith(str, startStr){
-
+__StrStartsWith(str, startStr, caseSense := true){
+    return InStr(str, startStr, caseSense) == 1
 }
 
-__StrEndsWith(str, endStr){
-
+__StrEndsWith(str, endStr, caseSense := true){
+    return InStr(str, endStr, caseSense) == StrLen(str) - StrLen(endStr) + 1
 }
 
-__StrIncludes(str, v){
-
+__StrIncludes(str, v, caseSense:= true){
+    return InStr(str, v, caseSense) != 0
 }
 
-__StrIndexOf(str, v){
-
+__StrIndexOf(str, v, caseSense := true){
+    return InStr(str, v, caseSense)
 }
 
-__StrTrim(str, v){
-
+__StrTrim(str, omitChars?){
+    return Trim(str, IsSet(omitChars) ? omitChars : unset)
 }
 
-__StrTrimLeft(str, v){
-
+__StrTrimLeft(str, omitChars?){
+    return LTrim(str, IsSet(omitChars) ? omitChars : unset)
 }
 
-__StrTrimRight(str, v){
-
+__StrTrimRight(str, omitChars?){
+    return RTrim(str, IsSet(omitChars) ? omitChars : unset)
 }
 
 __StrCharCodeAt(str, i){
@@ -106,7 +115,7 @@ __StrCharCodeAt(str, i){
 }
 
 __StrConcat(str, params*){
-    o := ""
+    o := str
     for item in params {
         o := o . item
     }
@@ -115,4 +124,12 @@ __StrConcat(str, params*){
 
 __StrWrap(str, ch){
     return ch str ch
+}
+
+__StrToString(str){
+    return str.Wrap('"')
+}
+
+__StrReplace(str){
+
 }

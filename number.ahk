@@ -1,7 +1,6 @@
 __DefProp := {}.DefineProp
-__DefProp(Integer.Prototype, 'ToChar', {Call: __NumberToChar})
+__DefProp(1.Base, 'ToChar', {Call: __NumberToChar}) ; 数字转字符
 
 __NumberToChar(num){
-    msgbox 1
     return Chr(num)
 }

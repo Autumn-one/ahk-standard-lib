@@ -2,3 +2,4 @@
 #Include utils.ahk
 #Include object.ahk
 #Include array.ahk
+#Include number.ahk

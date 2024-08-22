@@ -1,13 +1,33 @@
-__DefProp := {}.DefineProp
-; __StringPrototype := {}.Base
 
-__DefProp({}.Base, "__Enum", { Call: (obj, *) => obj.OwnProps()})
-__DefProp({}.Base, "__Item", { get: (obj, k) => obj.%k%, set: (obj, v, k) => obj.%k% := v})
-__DefProp({}.Base, "Keys", { Call: __ObjectKeys })
-__DefProp({}.Base, "Values", { Call: __ObjectValues })
-__DefProp({}.Base, "Items", { Call: __ObjectItems })
-__DefProp({}.Base, "ToString", { Call: __ObjectToString })
-__DefProp({}.Base, "Length", { get: (obj, *) => obj.Keys().Length })
+({}.Base).DefineProp("__Enum", { Call: (obj, *) => obj.OwnProps()})
+({}.Base).DefineProp("__Item", { get: (obj, k) => obj.%k%, set: (obj, v, k) => obj.%k% := v})
+({}.Base).DefineProp("Keys", { Call: __ObjectKeys })
+({}.Base).DefineProp("Values", { Call: __ObjectValues })
+({}.Base).DefineProp("Items", { Call: __ObjectItems })
+({}.Base).DefineProp("ToString", { Call: __ObjectToString })
+({}.Base).DefineProp("Length", { get: (obj, *) => obj.Keys().Length })
+({}.Base).DefineProp("Has", { Call: __ObjectHas })
+({}.Base).DefineProp("Contains", { Call: __ObjectContains })
+({}.Base).DefineProp("Merge", { Call: __ObjectMerge })
+
+
+
+__ObjectMerge(obj, params*){
+    for oitem in params {
+        for k, v in oitem {
+            obj[k] := v
+        }
+    }
+    return obj
+}
+
+__ObjectHas(obj, prop){
+    return obj.HasOwnProp(prop)
+}
+
+__ObjectContains(obj, prop){
+    return obj.HasOwnProp(prop)
+}
 
 __ObjectEnum(obj, paramNum){
     EnumFn := obj.OwnProps()
@@ -57,7 +77,6 @@ __ObjectToString(obj){
     o := "{ "
     for k, v in obj {
         o := o.Concat(
-            o,
             k,
             ": ",
             type(v) == "String" ? v.wrap('"') : v,
