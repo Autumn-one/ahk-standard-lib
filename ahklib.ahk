@@ -37,9 +37,13 @@ if !A_ScriptDir.Includes("C:\Windows\System32") {
 ; 先
 ; 下载压缩包
 dir1Arr := Everything.GetAllDir("wfn:AutoHotkey.exe")
+msgbox "dir1Arr:" String(dir1Arr)
 dir2Arr := Everything.GetAllDir("wfn:AutoHotkey32.exe")
+msgbox "dir2Arr:" String(dir2Arr)
 dir3Arr := Everything.GetAllDir("wfn:AutoHotkey64.exe")
+msgbox "dir3Arr:" String(dir3Arr)
 dirArr := dir1Arr.Intersect(dir2Arr, dir3Arr)
+msgbox "dirArr:" String(dirArr)
 dirPath := ""
 if(dirArr.Length != 1){
     _r := msgbox("我们不能确认你ahk的安装位置,请手动选择AutoHotKey.exe所在目录", "选择目录", "1")
