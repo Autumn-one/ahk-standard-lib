@@ -1,6 +1,6 @@
 println(params*){
     if !DllCall("GetStdHandle", "uint", -11, "ptr"){
-        open_console()
+        OpenConsole()
     }
     output := ""
     lastChar := params.Pop()
