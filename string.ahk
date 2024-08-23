@@ -28,7 +28,12 @@ __DefProp("".Base, 'Code', {Call: __StrCharCodeAt})
 __DefProp("".Base, 'Concat', {Call: __StrConcat})
 __DefProp("".Base, 'Wrap', {Call: __StrWrap})
 __DefProp("".Base, 'ToString', {Call: __StrToString})
-__DefProp("".Base, 'Replace', {Call: __StrReplace}) ; todo 后面在实现,先想想
+; __DefProp("".Base, 'Replace', {Call: __StrReplace}) ; todo 后面在实现,先想想
+__DefProp("".Base, 'ToCode', {Call: __StrToCode})
+__DefProp("".Base, 'ToLower', {Call: (str) => StrLower(str)})
+__DefProp("".Base, 'ToUpper', {Call: (str) => StrUpper(str)})
+__DefProp("".Base, 'ToTitle', {Call: (str) => StrTitle(str)})
+
 
 
 __StrEnum(str, paramNum) {
@@ -72,6 +77,14 @@ __StrItemGet(str, params*) {
 
 __StrItemSet(str, params*){
     ; 对字符串设置不会产生任何的效果
+}
+
+__StrToCode(str){
+    output := ""
+    for item in str {
+        output := output.Concat(Ord(item))
+    }
+    return output * 1
 }
 
 __StrSplit(str, params*){

@@ -21,6 +21,7 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([].Base).DefineProp("IndexOf", { Call: __ArrayIndexOf})
 ([].Base).DefineProp("IndexOfAll", { Call: __ArrayIndexOfAll})
 ([].Base).DefineProp("Flat", { Call: __ArrayFlat})
+([].Base).DefineProp("Unique", { Call: __ArrayUnique})
 ([].Base).DefineProp("Sort", { Call: __ArraySort})
 
 __ArrayJoin(arr, separator := ","){
@@ -189,7 +190,36 @@ __ArrayFlat(arr, depth := 0, count := 0){
 }
 
 __ArraySort(arr, sortfn := (a,b) => a - b){
-    
+    if arr.length < 1 {
+        return []
+    }
+    left := []
+    right := []
+    middle := []
+    base := arr[1]
+    for item in arr {
+        cond := sortfn(item, base)
+        if cond < 0 {
+            left.push(item)
+        }else if cond > 0{
+            right.push(item)
+        }else{
+            middle.push(item)
+        }
+    }
+
+    return [].Concat(__ArraySort(left, sortfn), middle, __ArraySort(right, sortfn))
+
+}
+
+__ArrayUnique(arr){
+    newArr := []
+    for item in arr {
+        if !newArr.Includes(item){
+            newArr.Push(item)
+        }
+    }
+    return newArr
 }
 
 __ArrayItemGet(arr, params*){
