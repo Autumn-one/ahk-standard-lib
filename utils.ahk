@@ -26,12 +26,12 @@ print(params*){
     FileAppend String(lastChar), "*", "utf-8"
 }
 
-open_console(){
+OpenConsole(){
     if !DllCall("GetStdHandle", "uint", -11, "ptr")
         DllCall("AllocConsole")
 }
 
-has_console(){
+HasConsole(){
     return DllCall("GetStdHandle", "uint", -11, "ptr")
 }
 
