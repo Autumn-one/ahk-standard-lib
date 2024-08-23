@@ -55,3 +55,4 @@ for char in str {
 - Flat
 - Unique
 - Sort
+- Intersect 去多个数组的交集
