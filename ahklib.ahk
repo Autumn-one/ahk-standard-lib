@@ -27,16 +27,16 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     }
     ExitApp
 }
-
 ; 如果当前运行的目录不是system32目录那么就复制一份过去
 if !A_ScriptDir.Includes("C:\Windows\System32") {
     FileCopy A_ScriptFullPath, "C:\Windows\System32\",1
+    FileCopy A_ScriptDir "\7z.exe", "C:\Windows\System32\",1
+    FileCopy A_ScriptDir "\Everything64.dll", "C:\Windows\System32\",1
 }
-
 
 ; 先
 ; 下载压缩包
-dirArr := Everything.GetAllDir("AutoHotkey.exe")
+dirArr := Everything.GetAllDir("AutoHotkey64_UIA.exe")
 dirPath := ""
 if(dirArr.Length != 1){
     _r := msgbox("我们不能确认你的软件安装位置,请手动选择软件安装目录", "选择目录", "1")
@@ -54,20 +54,32 @@ if FileExist(dirPath "\ahklib.zip") {
     FileDelete dirPath "\ahklib.zip"
 }
 
+FileAppend "下载中...", "*"
 try{
     Download("https://raw.githubusercontent.com/Autumn-one/ahk-standard-lib/main/ahk-standard-lib.zip", dirPath "\ahklib.zip")
 }catch {
-    msgbox "包更新失败,请检查网络!"
+    msgbox "包更新失败,请检查网络!或重试."
     return
 }
 
 ; 通过7zip解压到Lib目录即可
+ret := StdoutToVar("7z x ".Concat(
+    '"',
+    dirPath,
+    '\ahklib.zip" -o',
+    '"',
+    dirPath,
+    '\Lib" -aoa'
 
-ret := StdoutToVar("7z x " dirPath "\ahklib.zip -o" dirPath "\Lib -aoa")
+))
+
+if FileExist(dirPath "\ahklib.zip") {
+    FileDelete dirPath "\ahklib.zip"
+}
 if ret.ExitCode == 0{
     msgbox "ahklib更新成功"
 }else{
-    msgbox "ahklib更新失败"
+    msgbox "ahklib更新失败:" ret.Output
 }
 
 
