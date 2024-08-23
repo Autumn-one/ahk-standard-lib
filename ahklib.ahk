@@ -6,67 +6,193 @@ SetWorkingDir A_ScriptDir
 ; 定义管理器的版本
 ahklib_version := "0.1"
 
-mg := AHKLibManage()
 
-mg.usage("AHK Standard Lib`n基本用法: ahklib <命令> <命令值>`n")
+full_command_line := DllCall("GetCommandLine", "str")
 
-mg.addExe("update", "更新标准库也可以用来更新ahklib管理器自身, ahklib update lib 更新标准库 ahklib update self 更新管理器自身", mg.updateHandle)
-mg.addExe("list", "列出标准库版本,也可以列出管理器的版本", mg.listHandle)
-mg.addExe("remove", "移除标准库,也可以用来移除管理器自己, ahklib remove lib 移除标准库, ahklib remove self 移除管理器自身", mg.listHandle)
-mg.addExe("install", "安装标准库,也可以指定版本号安装标准库, ahklib install lib 安装标准库, ahklib install self 安装管理器自身", mg.installHandle)
-mg.addExe("version", "查看标准库的当前版本或管理器的版本, ahklib version lib 查看标准库的版本, ahklib version self 查看管理器自身的版本", mg.versionHandle)
-mg.addExe("help", "查看帮助", mg.helpHandle)
-
-mg.output()
-
-
-class AHKLibManage{
-    intro := "" ; 一句话简介
-    cmd := "" ; 命令
-    cmdValue := "" ; 命令的值
-    helpList := [] ; 帮助版本
-    cmdHandles := Map() ; cmd对应的handle
-    __new(){
-        ; 创建一个管理器并解析参数
-        ; if A_Args[-1].StartsWith("/") {
-        ;     A_Args.Pop()
-        ; }
-        if A_Args.Length == 1 {
-            this.cmd := A_Args[1]
-        } else if A_Args.Length == 2 {
-            this.cmd := A_Args[1]
-            this.cmdValue := A_Args[2]
+if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
+{
+    try
+    {
+        args_str := ""
+        for index, item in A_Args {
+            if index == 1 {
+                args_str := item
+            }
+            args_str := args_str . " " . item
         }
+        if A_IsCompiled
+            Run '*RunAs "' A_ScriptFullPath '" ' args_str ' /restart'
+        else
+            Run '*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '" ' args_str
     }
-    usage(intro){
-        this.intro := intro
-    }
-    addExe(arg, desc, handle){
-        this.helpList.Push("ahklib " arg " " desc)
-        this.cmdHandles[arg] := handle
-    }
-    helpHandle(){
-        println(this.intro)
-        println(this.helpList.Join("`n"))
-    }
-    updateHandle(){
-        
-    }
-    listHandle(){
+    ExitApp
+}
 
-    }
-    removeHandle(){
+; 如果当前运行的目录不是system32目录那么就复制一份过去
+if !A_ScriptDir.Includes("C:\Windows\System32") {
+    FileCopy A_ScriptFullPath, "C:\Windows\System32\",1
+}
 
-    }
-    installHandle(){
 
+; 先
+; 下载压缩包
+dirArr := Everything.GetAllDir("AutoHotkey.exe")
+dirPath := ""
+if(dirArr.Length != 1){
+    _r := msgbox("我们不能确认你的软件安装位置,请手动选择软件安装目录", "选择目录", "1")
+    if _r == "Cancel"{ ; 如果取消了就算了
+        return
     }
-    versionHandle(){
+    dirPath := DirSelect(,2)
+    if !dirPath{
+        return
+    }
+}else{
+    dirPath := dirArr[1]
+}
+if FileExist(dirPath "\ahklib.zip") {
+    FileDelete dirPath "\ahklib.zip"
+}
 
+try{
+    Download("https://raw.githubusercontent.com/Autumn-one/ahk-standard-lib/main/ahk-standard-lib.zip", dirPath "\ahklib.zip")
+}catch {
+    msgbox "包更新失败,请检查网络!"
+    return
+}
+
+; 通过7zip解压到Lib目录即可
+
+ret := StdoutToVar("7z x " dirPath "\ahklib.zip -o" dirPath "\Lib -aoa")
+if ret.ExitCode == 0{
+    msgbox "ahklib更新成功"
+}else{
+    msgbox "ahklib更新失败"
+}
+
+
+
+
+
+
+
+class Everything {
+    static EvDll := ""
+    static __New(){
+            this.EvDll := DllCall("LoadLibrary", "Str", "Everything64.dll", "Ptr")
     }
-    output(){
-        if this.cmdHandles.Has(this.cmd){
-            this.cmdHandles[this.cmd].bind(this)()
+    static GetCount(keyword){
+        try {
+            DllCall("Everything64.dll\Everything_SetSearch", "Str", keyword)
+        } catch Error as e {
+            ExitApp
         }
+        DllCall("Everything64.dll\Everything_Query", "int64", 1)
+        return DllCall("Everything64.dll\Everything_GetNumResults")
     }
+    static GetAllDir(keyword){
+        arr := []
+        Loop this.GetCount(keyword)
+        {
+            dirPath := DllCall("Everything64.dll\Everything_GetResultPath", "Int", A_index - 1, "Str")
+            arr.Push(dirPath)
+        }
+        return arr
+    }
+}
+
+
+
+; ----------------------------------------------------------------------------------------------------------------------
+; Function .....: StdoutToVar
+; Description ..: Runs a command line program and returns its output.
+; Parameters ...: sCmd - Commandline to be executed.
+; ..............: sDir - Working directory.
+; ..............: sEnc - Encoding used by the target process. Look at StrGet() for possible values.
+; Return .......: Command output as a string on success, empty string on error.
+; AHK Version ..: AHK v2 x32/64 Unicode
+; Author .......: Sean (http://goo.gl/o3VCO8), modified by nfl and by Cyruz
+; License ......: WTFPL - http://www.wtfpl.net/txt/copying/
+; Changelog ....: Feb. 20, 2007 - Sean version.
+; ..............: Sep. 21, 2011 - nfl version.
+; ..............: Nov. 27, 2013 - Cyruz version (code refactored and exit code).
+; ..............: Mar. 09, 2014 - Removed input, doesn't seem reliable. Some code improvements.
+; ..............: Mar. 16, 2014 - Added encoding parameter as pointed out by lexikos.
+; ..............: Jun. 02, 2014 - Corrected exit code error.
+; ..............: Nov. 02, 2016 - Fixed blocking behavior due to ReadFile thanks to PeekNamedPipe.
+; ..............: Apr. 13, 2021 - Code restyling. Fixed deprecated DllCall types.
+; ..............: Oct. 06, 2022 - AHK v2 version. Throw exceptions on failure.
+; ..............: Oct. 08, 2022 - Exceptions management and handles closure fix. Thanks to lexikos and iseahound.
+; ----------------------------------------------------------------------------------------------------------------------
+StdoutToVar(sCmd, sDir:=A_ScriptDir, sEnc:="CP0") {
+    ; Create 2 buffer-like objects to wrap the handles to take advantage of the __Delete meta-function.
+    oHndStdoutRd := { Ptr: 0, __Delete: delete(this) => DllCall("CloseHandle", "Ptr", this) }
+    oHndStdoutWr := { Base: oHndStdoutRd }
+    
+    If !DllCall( "CreatePipe"
+               , "PtrP" , oHndStdoutRd
+               , "PtrP" , oHndStdoutWr
+               , "Ptr"  , 0
+               , "UInt" , 0 )
+        Throw OSError(,, "Error creating pipe.")
+    If !DllCall( "SetHandleInformation"
+               , "Ptr"  , oHndStdoutWr
+               , "UInt" , 1
+               , "UInt" , 1 )
+        Throw OSError(,, "Error setting handle information.")
+
+    PI := Buffer(A_PtrSize == 4 ? 16 : 24,  0)
+    SI := Buffer(A_PtrSize == 4 ? 68 : 104, 0)
+    NumPut( "UInt", SI.Size,          SI,  0 )
+    NumPut( "UInt", 0x100,            SI, A_PtrSize == 4 ? 44 : 60 )
+    NumPut( "Ptr",  oHndStdoutWr.Ptr, SI, A_PtrSize == 4 ? 60 : 88 )
+    NumPut( "Ptr",  oHndStdoutWr.Ptr, SI, A_PtrSize == 4 ? 64 : 96 )
+
+    If !DllCall( "CreateProcess"
+               , "Ptr"  , 0
+               , "Str"  , sCmd
+               , "Ptr"  , 0
+               , "Ptr"  , 0
+               , "Int"  , True
+               , "UInt" , 0x08000000
+               , "Ptr"  , 0
+               , "Ptr"  , sDir ? StrPtr(sDir) : 0
+               , "Ptr"  , SI
+               , "Ptr"  , PI )
+        Throw OSError(,, "Error creating process.")
+
+    ; The write pipe must be closed before reading the stdout so we release the object.
+    ; The reading pipe will be released automatically on function return.
+    oHndStdOutWr := ""
+
+    ; Before reading, we check if the pipe has been written to, so we avoid freezings.
+    nAvail := 0, nLen := 0
+    While DllCall( "PeekNamedPipe"
+                 , "Ptr"   , oHndStdoutRd
+                 , "Ptr"   , 0
+                 , "UInt"  , 0
+                 , "Ptr"   , 0
+                 , "UIntP" , &nAvail
+                 , "Ptr"   , 0 ) != 0
+    {
+        ; If the pipe buffer is empty, sleep and continue checking.
+        If !nAvail && Sleep(100)
+            Continue
+        cBuf := Buffer(nAvail+1)
+        DllCall( "ReadFile"
+               , "Ptr"  , oHndStdoutRd
+               , "Ptr"  , cBuf
+               , "UInt" , nAvail
+               , "PtrP" , &nLen
+               , "Ptr"  , 0 )
+        sOutput .= StrGet(cBuf, nLen, sEnc)
+    }
+    
+    ; Get the exit code, close all process handles and return the output object.
+    DllCall( "GetExitCodeProcess"
+           , "Ptr"   , NumGet(PI, 0, "Ptr")
+           , "UIntP" , &nExitCode:=0 )
+    DllCall( "CloseHandle", "Ptr", NumGet(PI, 0, "Ptr") )
+    DllCall( "CloseHandle", "Ptr", NumGet(PI, A_PtrSize, "Ptr") )
+    Return { Output: sOutput, ExitCode: nExitCode } 
 }
