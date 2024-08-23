@@ -36,10 +36,13 @@ if !A_ScriptDir.Includes("C:\Windows\System32") {
 
 ; 先
 ; 下载压缩包
-dirArr := Everything.GetAllDir("AutoHotkey64_UIA.exe")
+dir1Arr := Everything.GetAllDir("wfn:AutoHotkey.exe")
+dir2Arr := Everything.GetAllDir("wfn:AutoHotkey32.exe")
+dir3Arr := Everything.GetAllDir("wfn:AutoHotkey64.exe")
+dirArr := dir1Arr.Intersect(dir2Arr, dir3Arr)
 dirPath := ""
 if(dirArr.Length != 1){
-    _r := msgbox("我们不能确认你的软件安装位置,请手动选择软件安装目录", "选择目录", "1")
+    _r := msgbox("我们不能确认你ahk的安装位置,请手动选择AutoHotKey.exe所在目录", "选择目录", "1")
     if _r == "Cancel"{ ; 如果取消了就算了
         return
     }
@@ -54,9 +57,14 @@ if FileExist(dirPath "\ahklib.zip") {
     FileDelete dirPath "\ahklib.zip"
 }
 
+; 如果有之前没清楚的压缩包就先清楚
+if FileExist(dirPath "\ahklib.zip"){
+    FileDelete dirPath "\ahklib.zip"
+}
+
 FileAppend "下载中...", "*"
 try{
-    Download("https://raw.githubusercontent.com/Autumn-one/ahk-standard-lib/main/ahk-standard-lib.zip", dirPath "\ahklib.zip")
+    Download("https://codeload.github.com/Autumn-one/ahk-standard-lib/zip/refs/heads/main", dirPath "\ahklib.zip")
 }catch {
     msgbox "包更新失败,请检查网络!或重试."
     return
@@ -69,9 +77,14 @@ ret := StdoutToVar("7z x ".Concat(
     '\ahklib.zip" -o',
     '"',
     dirPath,
-    '\Lib" -aoa'
-
+    '\" -aoa'
 ))
+
+if FileExist(dirPath "\Lib"){
+    DirDelete dirPath "\Lib", 1
+}
+
+DirMove(dirPath "\ahk-standard-lib-main", dirPath "\Lib", 1)
 
 if FileExist(dirPath "\ahklib.zip") {
     FileDelete dirPath "\ahklib.zip"

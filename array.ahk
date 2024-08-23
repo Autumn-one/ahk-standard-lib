@@ -23,6 +23,7 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([].Base).DefineProp("Flat", { Call: __ArrayFlat})
 ([].Base).DefineProp("Unique", { Call: __ArrayUnique})
 ([].Base).DefineProp("Sort", { Call: __ArraySort})
+([].Base).DefineProp("Intersect", { Call: __ArrayIntersect})
 
 __ArrayJoin(arr, separator := ","){
     output := ""
@@ -33,6 +34,17 @@ __ArrayJoin(arr, separator := ","){
         output := output[1, -1 - separator.length]
     }
     return output
+}
+
+__ArrayIntersect(arr, params*){
+    newArr := []
+    for item in arr {
+        value := item
+        if params.Every((i) => i.Includes(value), true) {
+            newArr.Push(value)
+        }
+    }
+    return newArr
 }
 
 
