@@ -34,6 +34,7 @@ if !A_ScriptDir.Includes("C:\Windows\System32") {
     FileCopy A_ScriptDir "\Everything64.dll", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\7z.dll", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\Everything.exe", "C:\Windows\System32\",1
+    FileCopy A_ScriptDir "\Everything.ini", "C:\Windows\System32\",1
 }
 
 ; 检查everything是否初始化完毕
