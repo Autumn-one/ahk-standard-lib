@@ -33,6 +33,8 @@ __DefProp("".Base, 'ToCode', {Call: __StrToCode})
 __DefProp("".Base, 'ToLower', {Call: (str) => StrLower(str)})
 __DefProp("".Base, 'ToUpper', {Call: (str) => StrUpper(str)})
 __DefProp("".Base, 'ToTitle', {Call: (str) => StrTitle(str)})
+__DefProp("".Base, 'Format', {Call: (str, params*) => Format(str, params*)})
+__DefProp("".Base, 'Templ', {Call: StrTemp})
 
 
 
