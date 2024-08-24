@@ -4,7 +4,7 @@ SetWorkingDir A_ScriptDir
 #Include stdlib.ahk
 
 ; 定义管理器的版本
-ahklib_version := "0.1"
+ahklib_version := "0.2"
 
 
 full_command_line := DllCall("GetCommandLine", "str")
@@ -33,14 +33,52 @@ if !A_ScriptDir.Includes("C:\Windows\System32") {
     FileCopy A_ScriptDir "\7z.exe", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\Everything64.dll", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\7z.dll", "C:\Windows\System32\",1
+    FileCopy A_ScriptDir "\Everything.exe", "C:\Windows\System32\",1
 }
 
-; 先
-; 下载压缩包
-dir1Arr := Everything.GetAllDir("wfn:AutoHotkey.exe")
-dir2Arr := Everything.GetAllDir("wfn:AutoHotkey32.exe")
-dir3Arr := Everything.GetAllDir("wfn:AutoHotkey64.exe")
-dirArr := dir1Arr.Intersect(dir2Arr, dir3Arr)
+; 检查everything是否初始化完毕
+builtInEverything := false
+try {
+    if !Everything.IsDBLoaded() && Everything.GetLastError() == 2 && !Everything.HasEverythingProcess() {
+        builtInEverything := true
+        Everything.RunEverything()
+        Everything.GetAllDir("123")
+        FileAppend "正在初始化Everything`n", "*"
+        Sleep(1000)
+        if !Everything.IsDBLoaded() {
+            count := 0
+            while Everything.ReBuildDB() = 0 {
+                if count >= 3{
+                    break
+                }
+                count++
+                Sleep(100)
+            }
+            Everything.GetAllDir("123")
+            if !Everything.IsDBLoaded(){
+                msgbox "everything初始化失败,请自行安装并重启软件"
+                return
+            }
+        
+            Everything.SaveDB()
+        }
+        
+    }
+    
+    ; 先
+    ; 下载压缩包
+    dir1Arr := Everything.GetAllDir("wfn:AutoHotkey.exe")
+    dir2Arr := Everything.GetAllDir("wfn:AutoHotkey32.exe")
+    dir3Arr := Everything.GetAllDir("wfn:AutoHotkey64.exe")
+    dirArr := dir1Arr.Intersect(dir2Arr, dir3Arr)
+}
+
+if builtInEverything {
+    if Everything.Exit() = 0 && ProcessExist("everything.exe") {
+        ProcessClose("everything.exe")
+    }
+}
+
 dirPath := ""
 if(dirArr.Length != 1){
     _r := msgbox("我们不能确认你ahk的安装位置,请手动选择AutoHotKey.exe所在目录", "选择目录", "1")
@@ -101,10 +139,6 @@ if ret.ExitCode == 0{
 
 
 
-
-
-
-
 class Everything {
     static EvDll := ""
     static __New(){
@@ -128,8 +162,36 @@ class Everything {
         }
         return arr
     }
+    static HasEverythingProcess(){
+        DetectHiddenWindows 1
+        ret := ProcessExist("everything.exe")
+        DetectHiddenWindows 0
+        return ret
+    }
+    static RunEverything(){
+        cmdstr := "everything.exe -startup "
+        if FileExist(A_ScriptDir "\Everything.db") {
+            cmdStr := cmdStr "-db " '"' A_ScriptDir "\Everything.db" '"'
+        }
+        Run cmdStr
+        ProcessWait "everything.exe", 2
+    }
+    static IsDBLoaded(){
+        return DllCall("Everything64.dll\Everything_IsDBLoaded", "Int") 
+    }
+    static ReBuildDB(){
+        return DllCall("Everything64.dll\Everything_RebuildDB", "Int") 
+    }
+    static Exit(){
+        return DllCall("Everything64.dll\Everything_Exit", "Int") 
+    }
+    static GetLastError(){
+        return DllCall("Everything64.dll\Everything_GetLastError", "Int") 
+    }
+    static SaveDB(){
+        return DllCall("Everything64.dll\Everything_SaveDB", "Int")
+    }
 }
-
 
 
 ; ----------------------------------------------------------------------------------------------------------------------
