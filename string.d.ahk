@@ -1,5 +1,5 @@
-/** @extends ~\syntaxes\ahk2\Array */
-class String {
+/** @extends {#string} */
+class String extends Primitive{
     /**
      * 将字符串切割成数组 StrSplit方法的别名
      * @param {Array, String} Delimiters 一个分隔符或分隔符组成的数组, 不传就是切割成单个字符 
