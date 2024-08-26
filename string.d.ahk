@@ -1,4 +1,4 @@
-/** @extends ~\syntaxes\ahk2\String */
+/** @extends ~\syntaxes\ahk2\Array */
 class String {
     /**
      * 将字符串切割成数组 StrSplit方法的别名

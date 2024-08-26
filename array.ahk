@@ -1,3 +1,4 @@
+;@include array.d.ahk
 ([].Base).DefineProp("ToString", { Call: __ArrayToString})
 
 __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")

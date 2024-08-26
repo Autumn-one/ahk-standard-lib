@@ -1,7 +1,7 @@
 ; 让字符串具备基本的数组访问行为和可循环可切片的行为
-;@include "string.d.ahk"
 #Requires AutoHotkey v2.0
 #Include utils.ahk
+;@include "string.d.ahk"
 
 __StrTemp(str, vars*)
 {

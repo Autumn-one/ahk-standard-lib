@@ -1,3 +1,4 @@
+/** @extends ~\syntaxes\ahk2\Array */
 class Array<T = Any> extends Object {
     /**
 	 * 判断一个数组是否包含某个项目, 返回一个布尔值 0 或 1
@@ -70,6 +71,7 @@ class Array<T = Any> extends Object {
     UnShift(items*) => Array<T>
     /**
      * 将多个数组连接成一个新数组并返回
+     * 
      * arr := [1,2,3]
      * 
      * arr.Concat([4,5,6], [7,8,9]) // [1,2,3,4,5,6,7,8,9]
