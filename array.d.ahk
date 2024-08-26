@@ -1,5 +1,5 @@
-/** @extends ~\syntaxes\ahk2\Array */
-class Array<T = Any> extends Object {
+/** @extends {#Array} */
+class Array<T = Any> {
     /**
 	 * 判断一个数组是否包含某个项目, 返回一个布尔值 0 或 1
      * 
