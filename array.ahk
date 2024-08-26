@@ -7,6 +7,7 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 
 ([].Base).DefineProp("Join", { Call: __ArrayJoin})
 ([].Base).DefineProp("Map", { Call: __ArrayMap})
+([].Base).DefineProp("ForEach", { Call: __ArrayForEach})
 ([].Base).DefineProp("Filter", { Call: __ArrayFilter})
 ([].Base).DefineProp("Shift", { Call: __ArrayShift})
 ([].Base).DefineProp("UnShift", { Call: __ArrayUnShift})
@@ -14,16 +15,21 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([].Base).DefineProp("Every", { Call: __ArrayEvery})
 ([].Base).DefineProp("Some", { Call: __ArraySome})
 ([].Base).DefineProp("Remove", { Call: __ArrayRemove})
+([].Base).DefineProp("RemoveAll", { Call: __ArrayRemoveAll})
 ([].Base).DefineProp("Find", { Call: __ArrayFind})
 ([].Base).DefineProp("FindAll", { Call: __ArrayFindAll})
-([].Base).DefineProp("Contains", { Call: __ArrayContains})
 ([].Base).DefineProp("Includes", { Call: __ArrayIncludes})
 ([].Base).DefineProp("IndexOf", { Call: __ArrayIndexOf})
 ([].Base).DefineProp("IndexOfAll", { Call: __ArrayIndexOfAll})
 ([].Base).DefineProp("Flat", { Call: __ArrayFlat})
 ([].Base).DefineProp("Unique", { Call: __ArrayUnique})
 ([].Base).DefineProp("Sort", { Call: __ArraySort})
+([].Base).DefineProp("Reverse", { Call: __ArrayReverse})
 ([].Base).DefineProp("Intersect", { Call: __ArrayIntersect})
+([].Base).DefineProp("Union", { Call: __ArrayUnion})
+([].Base).DefineProp("Xor", { Call: __ArrayXor})
+
+
 
 __ArrayJoin(arr, separator := ","){
     output := ""
@@ -34,6 +40,19 @@ __ArrayJoin(arr, separator := ","){
         output := output[1, -1 - separator.length]
     }
     return output
+}
+
+__ArrayUnion(arr, params*) {
+    newArr := [arr*]
+    params.forEach(item => item.forEach(i => !newArr.Includes(i) && newArr.Push(i)))
+    return newArr
+}
+
+__ArrayXor(arr, params*) {
+    newArr := []
+    iArr := arr.Intersect(params*)
+    arr.Union(params*).forEach(i => !iArr.Includes(i) && newArr.Push(i))
+    return newArr
 }
 
 __ArrayIntersect(arr, params*){
@@ -47,6 +66,12 @@ __ArrayIntersect(arr, params*){
     return newArr
 }
 
+
+__ArrayForEach(arr, eachfn){
+    for item in arr {
+        eachfn(item)
+    }
+}
 
 __ArrayMap(arr, mapfn){
     newArr := []
@@ -71,7 +96,7 @@ __ArrayFilter(arr, filterfn){
 __ArrayShift(arr, count := 1){ ; 默认删除头部一个元素
     ret := arr[1, count]
     arr[1, count] := [] 
-    return ret
+    return ret.Length == 1 ? ret[1] : ret
 }
 
 __ArrayUnShift(arr, params*){ ; 向头部添加若干个元素
@@ -114,18 +139,27 @@ __ArraySome(arr, somefn, short := false){ ; 默认不短路
 
 __ArrayRemove(arr, value, count := 1){ ; 默认删除一个
     i := 0
-    for index, item in arr {
-        FileAppend 1, "*"
-        if item == value {
-            arr.RemoveAt(index)
+    loop arr.length {
+        if A_Index > arr.length {
+            break
+        }
+        if arr[A_Index] == value {
+            arr.RemoveAt(A_Index)
             i++
-            if i == 0 {
+            A_Index--
+            if count == 0 {
                 continue
             } else if i == count {
                 break
             }
         }
     }
+    return arr
+}
+
+__ArrayRemoveAll(arr, delArr, count := 1){
+    delArr.forEach(i => arr.remove(i, count))
+    return arr
 }
 
 __ArrayFind(arr, findfn, dv := ""){
@@ -145,15 +179,6 @@ __ArrayFindAll(arr, findallfn){
         }
     }
     return newArr
-}
-
-__ArrayContains(arr, value){
-    for item in arr {
-        if item == value {
-            return true
-        }
-    }
-    return false
 }
 
 __ArrayIncludes(arr, value){
@@ -222,6 +247,15 @@ __ArraySort(arr, sortfn := (a,b) => a - b){
 
     return [].Concat(__ArraySort(left, sortfn), middle, __ArraySort(right, sortfn))
 
+}
+
+__ArrayReverse(arr){
+    newArr := []
+    len := arr.Length
+    loop arr.Length {
+        newArr.Push(arr[len - A_Index + 1])
+    }
+    return newArr
 }
 
 __ArrayUnique(arr){

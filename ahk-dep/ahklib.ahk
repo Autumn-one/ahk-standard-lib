@@ -1,7 +1,7 @@
 ;@Ahk2Exe-ConsoleApp
 #SingleInstance Force
 SetWorkingDir A_ScriptDir
-#Include stdlib.ahk
+#Include ../stdlib.ahk
 
 ; 定义管理器的版本
 ahklib_version := "0.2"

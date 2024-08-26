@@ -2,7 +2,7 @@
 #Requires AutoHotkey v2.0
 #Include utils.ahk
 
-StrTemp(str, vars*)
+__StrTemp(str, vars*)
 {
     for var in vars
         str := StrReplace(str, '{' NameOf(&%var%) '}', %var%)
@@ -20,21 +20,25 @@ __DefProp("".Base, 'StartsWith', {Call: __StrStartsWith})
 __DefProp("".Base, 'EndsWith', {Call: __StrEndsWith})
 __DefProp("".Base, 'Includes', {Call: __StrIncludes})
 __DefProp("".Base, 'IndexOf', {Call: __StrIndexOf})
+__DefProp("".Base, 'IndexOfAll', {Call: __StrIndexOfAll})
+__DefProp("".Base, 'LastIndexOf', {Call: __StrLastIndexOf})
 __DefProp("".Base, 'Trim', {Call: __StrTrim})
 __DefProp("".Base, 'TrimLeft', {Call: __StrTrimLeft})
 __DefProp("".Base, 'TrimRight', {Call: __StrTrimRight})
 __DefProp("".Base, 'CharCodeAt', {Call: __StrCharCodeAt})
-__DefProp("".Base, 'Code', {Call: __StrCharCodeAt})
+__DefProp("".Base, 'CodeAt', {Call: __StrCharCodeAt})
 __DefProp("".Base, 'Concat', {Call: __StrConcat})
 __DefProp("".Base, 'Wrap', {Call: __StrWrap})
 __DefProp("".Base, 'ToString', {Call: __StrToString})
-; __DefProp("".Base, 'Replace', {Call: __StrReplace}) ; todo 后面在实现,先想想
+__DefProp("".Base, 'Replace', {Call: __StrReplace})
+__DefProp("".Base, 'Reverse', {Call: __StrReverse})
 __DefProp("".Base, 'ToCode', {Call: __StrToCode})
+__DefProp("".Base, 'ToCodes', {Call: __StrToCodes})
 __DefProp("".Base, 'ToLower', {Call: (str) => StrLower(str)})
 __DefProp("".Base, 'ToUpper', {Call: (str) => StrUpper(str)})
 __DefProp("".Base, 'ToTitle', {Call: (str) => StrTitle(str)})
 __DefProp("".Base, 'Format', {Call: (str, params*) => Format(str, params*)})
-__DefProp("".Base, 'Templ', {Call: StrTemp})
+__DefProp("".Base, 'Templ', {Call: __StrTemp})
 
 
 
@@ -88,6 +92,13 @@ __StrToCode(str){
     }
     return output * 1
 }
+__StrToCodes(str){
+    newArr := []
+    for item in str {
+        newArr.Push(Ord(item))
+    }
+    return newArr
+}
 
 __StrSplit(str, params*){
     return StrSplit(str, params*)
@@ -111,6 +122,31 @@ __StrIncludes(str, v, caseSense:= true){
 
 __StrIndexOf(str, v, caseSense := true){
     return InStr(str, v, caseSense)
+}
+
+__StrIndexOfAll(str, v, caseSense := true){
+    newArr := []
+    innerStr := str
+    sublen := v.Length
+    count := 0
+    while i := innerStr.IndexOf(v) {
+        if i != 0{
+            newArr.Push(i + count)
+            count := count + i + sublen
+            i := i + sublen + 1
+            if i + sublen > innerStr.Length{
+                break
+            }
+            innerStr := innerStr[i, -1]
+        }else{
+            break
+        }
+    }
+    return newArr
+}
+
+__StrLastIndexOf(str, v, caseSense := true) {
+    return InStr(str, v, caseSense, -1)
 }
 
 __StrTrim(str, omitChars?){
@@ -145,6 +181,10 @@ __StrToString(str){
     return str.Wrap('"')
 }
 
-__StrReplace(str){
+__StrReplace(str, params*){
+    return StrReplace(str, params*)
+}
 
+__StrReverse(str){
+    return str.Split().Reverse().Join("")
 }
