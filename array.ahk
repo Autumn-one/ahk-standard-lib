@@ -1,4 +1,6 @@
-;@include array.d.ahk
+;@include en\array.d.ahk
+;@include zh\array.d.ahk
+;todo 还差mapx 和 filterx 没实现
 ([].Base).DefineProp("ToString", { Call: __ArrayToString})
 
 __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")

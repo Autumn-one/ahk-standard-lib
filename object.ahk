@@ -1,5 +1,6 @@
 
-;@include object.d.ahk
+;@include en\object.d.ahk
+;@include zh\object.d.ahk
 ({}.Base).DefineProp("__Enum", { Call: (obj, *) => obj.OwnProps()})
 ({}.Base).DefineProp("__Item", { get: (obj, k) => obj.%k%, set: (obj, v, k) => obj.%k% := v})
 ({}.Base).DefineProp("Keys", { Call: __ObjectKeys })

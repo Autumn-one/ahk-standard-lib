@@ -28,6 +28,11 @@ autohotkey语言的标准库,目标是提供更好的数据结构操作体验.�
 - Format 字符串模板 {1}
 - Templ 字符串模板 {变量名}
 - Reverse 翻转字符串
+- Remove 从字符串中删除子字符串
+- RemoveLeft 从左边删除
+- RemoveRight 从右边删除
+- PadStart 同js
+- PadEnd 同js
 
 ## 字符串相关操作
 

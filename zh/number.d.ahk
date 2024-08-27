@@ -1,4 +1,5 @@
-class Number extends Primitive {
+/** @extends {#Number} */
+class Number {
     /**
      * 返回数字对应的字符
      * 

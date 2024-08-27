@@ -1,3 +1,7 @@
+/**
+ * 传入若干个参数,打印这些参数并换行,参数之间空格分隔
+ * @param params* 
+ */
 println(params*){
     if !DllCall("GetStdHandle", "uint", -11, "ptr"){
         OpenConsole()
@@ -15,6 +19,10 @@ println(params*){
     FileAppend output, "*", "utf-8"
 }
 
+/**
+ * 传入若干个参数,打印这些参数, 参数之间空格分隔,这个函数不会换行
+ * @param params 
+ */
 print(params*){
     if !DllCall("GetStdHandle", "uint", -11, "ptr"){
         return
@@ -130,4 +138,15 @@ HashFile(filePath, hashType:=2)
 		HashVal .= Format('{:02x}', (NumGet(bHash, A_Index-1, "UChar")) & 0xff)
 	
 	return HashVal
+}
+
+
+/**
+ * 获取本地操作系统的语言 中文是 zh-CN
+ */
+GetLocaleLanguage(){
+    LOCALE_NAME_MAX_LENGTH:=85
+    lpLocaleName:=Buffer(bufferSize:=LOCALE_NAME_MAX_LENGTH*A_PtrSize, 0)
+    length:=DllCall("Kernel32\GetUserDefaultLocaleName", "Ptr",lpLocaleName.Ptr, "Int",cchLocaleName:=LOCALE_NAME_MAX_LENGTH, "Int")
+    return StrGet(lpLocaleName.Ptr, length, "UTF-16")
 }

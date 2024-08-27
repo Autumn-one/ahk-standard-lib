@@ -215,4 +215,72 @@ class String extends Primitive{
      * @returns {String} 
      */
     Reverse() => String
+    /**
+     * 返回指定字符串的长度, 如果长度已够原样返回, 长度不够则从开始填充, 填充过程可能截断strFill
+     * @param {Integer} num 指定要返回的字符串长度
+     * @param {String} strFill 不够长度时用来填充的字符串
+     * 
+     * 'x'.padStart(5, 'ab') // 'ababx'
+     * 
+     * 'x'.padStart(4, 'ab') // 'abax'
+     * 
+     * '12'.padStart(10, 'YYYY-MM-DD') // "YYYY-MM-12"
+     * 
+     * '09-12'.padStart(10, 'YYYY-MM-DD') // "YYYY-09-12"
+     * @returns {String} 
+     */
+    PadStart(num: Integer, strFill: String := " ") => String
+
+    /**
+     * 返回指定字符串的长度, 如果长度已够原样返回, 长度不够则从结尾填充, 填充过程可能截断strFill
+     * @param {Integer} num 指定要返回的字符串长度
+     * @param {String} strFill 不够长度时用来填充的字符串
+     * 
+     * 'xxx'.padEnd(2, 'ab') // 'xxx'
+     * 
+     * 'x'.padEnd(4) // 'x   '
+     * @returns {String} 
+     */
+    PadEnd(num: Integer, strFill: String := " ") => String
+
+    /**
+     * 返回重复字符串
+     * @param {Integer} num 重复次数
+     * 
+     * 'x'.repeat(3) // "xxx"
+     * 
+     * 'hello'.repeat(2) // "hellohello"
+     * @returns {String} 
+     */
+    Repeat(num: Integer) => String
+
+    /**
+     * 移除字符串中的某个子字符串
+     * @param {String} value 要移除的字符串
+     * 
+     * "西瓜太大".Remove("西瓜") // "太大"
+     * 
+     * @returns {String} 
+     */
+    Remove(value: String) => String
+
+    /**
+     * 移除字符串左边的子字符串,如果左边不匹配就不管
+     * @param {String} value 要移除的左边的字符串
+     * 
+     * "西瓜太大".RemoveLeft("西瓜") // "太大"
+     * 
+     * "大西瓜太大".RemoveLeft("西瓜") // "大西瓜太大"
+     * @returns {String} 
+     */
+    RemoveLeft(value: String) => String
+
+    /**
+     * 移除字符串右边的子字符串,如果右边不匹配就不管
+     * @param {String} value 
+     * 
+     * "西瓜太甜".RemoveRight("太甜") // "西瓜"
+     * @returns {String} 
+     */
+    RemoveRight(value: String) => String
 }

@@ -1,7 +1,8 @@
 ; 让字符串具备基本的数组访问行为和可循环可切片的行为
 #Requires AutoHotkey v2.0
 #Include utils.ahk
-;@include "string.d.ahk"
+;@include "en\string.d.ahk"
+;@include "zh\string.d.ahk"
 
 __StrTemp(str, vars*)
 {
@@ -38,9 +39,77 @@ __DefProp("".Base, 'ToCodes', {Call: __StrToCodes})
 __DefProp("".Base, 'ToLower', {Call: (str) => StrLower(str)})
 __DefProp("".Base, 'ToUpper', {Call: (str) => StrUpper(str)})
 __DefProp("".Base, 'ToTitle', {Call: (str) => StrTitle(str)})
+__DefProp("".Base, 'padStart', {Call: __StrPadStart})
+__DefProp("".Base, 'padEnd', {Call: __StrPadEnd})
+__DefProp("".Base, 'repeat', {Call: __StrRepeat})
 __DefProp("".Base, 'Format', {Call: (str, params*) => Format(str, params*)})
 __DefProp("".Base, 'Templ', {Call: __StrTemp})
+__DefProp("".Base, 'Remove', {Call: (str, value) => value == "" ? str : StrReplace(str, value, unset, true)})
+__DefProp("".Base, 'RemoveLeft', {Call: __StrRemoveLeft})
+__DefProp("".Base, 'RemoveRight', {Call: __StrRemoveRight})
 
+__StrRemoveLeft(str, value){
+    if value == "" {
+        return str
+    }
+    if str.StartsWith(value){
+        return str[value.length + 1, -1]
+    }
+    return str
+}
+
+__StrRemoveRight(str, value){
+    if value == "" {
+        return str
+    }
+    if str.EndsWith(value) {
+        return str[1, str.length - value.length]
+    }
+    return str
+}
+
+__StrPadStart(str, num, fillStr := " ") {
+    output := ""
+    len := str.Length
+    fillLen := fillStr.Length
+    if len >= num {
+        return str
+    }
+    if (mul := (num - len) // fillLen) >= 1{
+        output := fillStr.Repeat(mul) . str 
+    }else{
+        output := str
+    }
+    output := fillStr[1, num - output.length] . output
+    return output
+}
+
+
+__StrPadEnd(str, num, fillStr := " ") {
+    output := ""
+    len := str.Length
+    fillLen := fillStr.Length
+    if len >= num {
+        return str
+    }
+    if (mul := (num - len) // fillLen) >= 1{
+        output := str . fillStr.Repeat(mul)
+    }else{
+        output := str
+    }
+    output := output . fillStr[1, num - output.length]
+    return output
+}
+
+
+__StrRepeat(str, num){
+    output := ""
+    loop num {
+        output := output . str
+    }
+
+    return output
+}
 
 
 __StrEnum(str, paramNum) {
@@ -114,7 +183,7 @@ __StrStartsWith(str, startStr, caseSense := true){
 }
 
 __StrEndsWith(str, endStr, caseSense := true){
-    return InStr(str, endStr, caseSense) == StrLen(str) - StrLen(endStr) + 1
+    return InStr(str, endStr, caseSense, -1) == StrLen(str) - StrLen(endStr) + 1
 }
 
 __StrIncludes(str, v, caseSense:= true){

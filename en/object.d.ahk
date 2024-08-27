@@ -1,6 +1,7 @@
-class Object.Base{
+/** @extends {#Object} */
+class Object{
     /**
-     * 获取对象的key组成的数组
+     * Gets an array of keys for an object
      * 
      * obj := {a: 1, b: 2}
      * 
@@ -10,7 +11,7 @@ class Object.Base{
     Keys() => Array
 
     /**
-     * 获取对象的Value组成的数组
+     * Gets an array of the object's values
      * 
      * obj := {a: 1, b: 2}
      * 
@@ -19,7 +20,7 @@ class Object.Base{
      */
     Values() => Array
     /**
-     * 获取对象的key value对组成的数组
+     * Gets an array of key value pairs for an object
      * 
      * obj := {a: 1, b: 2, c: 3}
      * 
@@ -28,7 +29,7 @@ class Object.Base{
      */
     Items() => Array
     /**
-     * 返回一个对象的字符串表示
+     * Returns a string representation of an object
      * 
      * obj := {a: 1, b: 2, c: 3}
      * 
@@ -37,7 +38,7 @@ class Object.Base{
      */
     ToString() => String
     /**
-     * 一个属性,获取对象的长度
+     * An attribute that gets the length of the object
      * 
      * obj := {a: 1, b: 2}
      * 
@@ -47,7 +48,7 @@ class Object.Base{
         get => Integer
     }
     /**
-     * 判断一个对象是否包含某个属性
+     * Determines whether an object contains a property
      * 
      * obj := {a: 1, b: 2, c: 3}
      * 
@@ -58,7 +59,7 @@ class Object.Base{
      */
     Has(prop) => Integer
     /**
-     * 判断一个对象是否包含某个属性
+     * Determines whether an object contains a property
      * 
      * obj := {a: 1, b: 2, c: 3}
      * 
@@ -69,7 +70,7 @@ class Object.Base{
      */
     Contains() => Integer
     /**
-     * 将多个对象进行合并
+     * Merge multiple objects
      * 
      * obj := {a: 1, b: 2, c: 3}
      * 
