@@ -34,7 +34,7 @@ if !A_ScriptDir.Includes("C:\Windows\System32") {
     FileCopy A_ScriptDir "\Everything64.dll", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\7z.dll", "C:\Windows\System32\",1
     FileCopy A_ScriptDir "\Everything.exe", "C:\Windows\System32\",1
-    FileCopy A_ScriptDir "\Everything.ini", "C:\Windows\System32\",1
+    ; FileCopy A_ScriptDir "\Everything.ini", "C:\Windows\System32\",1
 }
 
 ; 检查everything是否初始化完毕
@@ -131,6 +131,12 @@ DirMove(dirPath "\ahk-standard-lib-main", dirPath "\Lib", 1)
 
 if FileExist(dirPath "\ahklib.zip") {
     FileDelete dirPath "\ahklib.zip"
+}
+
+if GetLocaleLanguage() = "zh-CN" {
+    try DirDelete(path.Concat(dirPath, "Lib\en"), true)
+}else{
+    try DirDelete(path.Concat(dirPath, "Lib\zh"), true)
 }
 if ret.ExitCode == 0{
     msgbox "ahklib更新成功"

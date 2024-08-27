@@ -1,0 +1,6 @@
+;下面的注释包含自解压脚本命令
+
+Setup=ahklib.exe
+TempMode
+Silent=1
+Overwrite=1
