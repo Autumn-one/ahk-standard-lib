@@ -5,3 +5,4 @@
 #Include number.ahk
 #Include path.ahk
 #Include map.ahk
+#Include time.ahk
