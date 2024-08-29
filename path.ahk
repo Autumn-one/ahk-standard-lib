@@ -58,11 +58,10 @@ class path{
     static ExtName(pathStr, Dot := false){
         temp := pathStr.RemoveRight("\").Split("\")[-1]
         arr := temp.Split(".")
-        if arr[-1] == ""{
+        if arr.length <= 1 {
             return ""
-        }else{
-            return Dot ? "." arr[-1] : arr[-1]
         }
+        return Dot ? "." arr[-1] : arr[-1]
     }
     
     /**
