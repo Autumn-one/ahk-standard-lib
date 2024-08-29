@@ -252,4 +252,34 @@ class Array<T = Any> {
      * @returns {Array<T>} 
      */
     Reverse() => Array<T>
+
+    /**
+     * Sum an array containing only numbers
+     * @returns {Integer} 
+     */
+    Sum() => Integer
+
+    /**
+     * An imitation of the Reduce method in javascript
+     * @param ReduceFunc 
+     * @param initial 
+     * 
+     * [1,2,3].Reduce((memo, item) => memo + item) // 1 + 2 + 3 = 6
+     * 
+     * [1,2,3].Reduce((memo, item) => memo + item, 6) // 6 + 1 + 2 + 3 = 12
+     * @returns {Any} 
+     */
+    Reduce(ReduceFunc, initial?) => Any
+
+    /**
+     * An imitation of the ReduceRight method in javascript
+     * @param ReduceFunc 
+     * @param initial 
+     * 
+     * [1,2,3].ReduceRight((memo, item) => memo + item) // 3 + 2 + 1 = 6
+     * 
+     * [1,2,3].ReduceRight((memo, item) => memo + item, 6) // 6 + 3 + 2 + 1 = 12
+     * @returns {Any} 
+     */
+    ReduceRight(ReduceFunc, initial?) => Any
 }

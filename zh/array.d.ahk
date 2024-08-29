@@ -252,4 +252,34 @@ class Array<T = Any> {
      * @returns {Array<T>} 
      */
     Reverse() => Array<T>
+
+    /**
+     * 对一个只包含数字的数组求和
+     * @returns {Integer} 
+     */
+    Sum() => Integer
+
+    /**
+     * javascript中Reduce方法的模仿
+     * @param ReduceFunc 
+     * @param initial 
+     * 
+     * [1,2,3].Reduce((memo, item) => memo + item) // 1 + 2 + 3 = 6
+     * 
+     * [1,2,3].Reduce((memo, item) => memo + item, 6) // 6 + 1 + 2 + 3 = 12
+     * @returns {Any} 
+     */
+    Reduce(ReduceFunc, initial?) => Any
+
+    /**
+     * javascript中ReduceRight方法的模仿
+     * @param ReduceFunc 
+     * @param initial 
+     * 
+     * [1,2,3].ReduceRight((memo, item) => memo + item) // 3 + 2 + 1 = 6
+     * 
+     * [1,2,3].ReduceRight((memo, item) => memo + item, 6) // 6 + 3 + 2 + 1 = 12
+     * @returns {Any} 
+     */
+    ReduceRight(ReduceFunc, initial?) => Any
 }

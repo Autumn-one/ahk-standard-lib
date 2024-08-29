@@ -4,7 +4,7 @@ SetWorkingDir A_ScriptDir
 #Include ../stdlib.ahk
 
 ; 定义管理器的版本
-ahklib_version := "0.2"
+ahklib_version := "0.5"
 
 
 full_command_line := DllCall("GetCommandLine", "str")
@@ -139,9 +139,9 @@ if GetLocaleLanguage() = "zh-CN" {
     try DirDelete(path.Concat(dirPath, "Lib\zh"), true)
 }
 if ret.ExitCode == 0{
-    msgbox "ahklib更新成功"
+    msgbox "ahklib{1}更新成功".format(ahklib_version)
 }else{
-    msgbox "ahklib更新失败:" ret.Output
+    msgbox "ahklib{1}更新失败:".format(ahklib_version) ret.Output
 }
 
 

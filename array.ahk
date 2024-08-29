@@ -31,7 +31,43 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([].Base).DefineProp("Intersect", { Call: __ArrayIntersect})
 ([].Base).DefineProp("Union", { Call: __ArrayUnion})
 ([].Base).DefineProp("Xor", { Call: __ArrayXor})
+([].Base).DefineProp("Sum", { Call: __ArraySum})
+([].Base).DefineProp("Reduce", { Call: __ArrayReduce})
+([].Base).DefineProp("ReduceRight", { Call: __ArrayReduceRight})
 
+__ArraySum(arr) {
+    return arr.Reduce((m, i) => i + m)
+}
+
+__ArrayReduce(arr, ReduceFunc, initial?){
+    if !IsSet(initial) {
+        reduceArr := arr[2, -1]
+        memo := arr[1]
+    }else{
+        reduceArr := arr[]
+        memo := initial
+    }
+
+    for item in reduceArr {
+        memo := ReduceFunc(memo, item)
+    }
+    return memo
+}
+
+__ArrayReduceRight(arr, ReduceFunc, initial?){
+    if !IsSet(initial) {
+        reduceArr := arr[1, -2]
+        memo := arr[-1]
+    }else{
+        reduceArr := arr[]
+        memo := initial
+    }
+
+    loop reduceArr.Length {
+        memo := ReduceFunc(memo, reduceArr[-A_Index])
+    }
+    return memo
+}
 
 
 __ArrayJoin(arr, separator := ","){
@@ -254,9 +290,8 @@ __ArraySort(arr, sortfn := (a,b) => a - b){
 
 __ArrayReverse(arr){
     newArr := []
-    len := arr.Length
     loop arr.Length {
-        newArr.Push(arr[len - A_Index + 1])
+        newArr.Push(arr[-A_Index])
     }
     return newArr
 }
@@ -272,7 +307,9 @@ __ArrayUnique(arr){
 }
 
 __ArrayItemGet(arr, params*){
-    if params.Length == 1 {
+    if params.Length == 0{
+        return arr.Clone()
+    }else if params.Length == 1 {
         return arr.RawGet(params.RawGet(1))
     }else if params.Length == 2{
         outArr := []

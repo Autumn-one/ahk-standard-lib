@@ -2,6 +2,7 @@
 class path{
     /**
      * 连接路径,这个函数会处理一些一些麻烦情况,路径的最后一定不含\
+     * Join the path, this function will handle some troublesome cases, the path must not contain \ at the end
      * @param {Array<String>} params* 
      * 
      * path.Concat("c:\cbs\", "\dds") // "c:\cbs\dds"
@@ -32,6 +33,7 @@ class path{
 
     /**
      * 获取路径的文件夹路径
+     * Obtain path Folder path
      * @param {String} pathStr 
      * 
      * path.DirName("c:\abc\ddd\efs.txt") // "c:\abc\ddd"
@@ -47,6 +49,7 @@ class path{
 
     /**
      * 获取路径中文件的后缀名
+     * Gets the file name extension in the path
      * @param {String} pathStr 
      * 
      * path.ExtName("c:\abc\ddd\efs.txt") // "txt"
@@ -60,6 +63,7 @@ class path{
     
     /**
      * 获取路径中的文件或文件夹名称
+     * Gets the name of the file or folder in the path
      * @param {String} PathStr 
      * @param {String} suffix 可选的要从结果后面去除的内容
      * 
