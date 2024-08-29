@@ -283,4 +283,45 @@ class String extends Primitive{
      * @returns {String} 
      */
     RemoveRight(value: String) => String
+
+    /**
+     * Path.concat alias, join path, this function will handle some troublesome cases, the path must not contain \ at the end
+     * @param params 
+     * 
+     * "c:\cbs\".ConcatP("\dds") // "c:\cbs\dds"
+     * 
+     * "c:\cbs\".ConcatP("\dds\") // "c:\cbs\dds"
+     * @returns {String} 
+     */
+    ConcatP(params*) => String
+
+    /**
+     * The alias of path.DirName, the path to the folder where the path is obtained
+     * 
+     * "c:\abc\ddd\efs.txt".DirName() // "c:\abc\ddd"
+     * @returns {String} 
+     */
+    DirName() => String
+
+    /**
+     * ExtName alias of path.ExtName, which is the file name extension in the path
+     * @param dot 
+     * 
+     * "c:\abc\ddd\efs.txt".ExtName() // "txt"
+     * 
+     * "c:\abc\ddd\efs.txt".ExtName(true) // ".txt"
+     * @returns {String} 
+     */
+    ExtName(dot := false) => String
+
+    /**
+     * BaseName alias to get the name of the file or folder in the path
+     * @param HasSuffix Whether the suffix is included
+     * 
+     * "c:\abc\ddd\efs.txt".BaseName() // "efs.txt"
+     * 
+     * "c:\abc\ddd\efs.txt".BaseName(false) // "efs"
+     * @returns {String} 
+     */
+    BaseName(HasSuffix := true) => String
 }

@@ -55,25 +55,29 @@ class path{
      * path.ExtName("c:\abc\ddd\efs.txt") // "txt"
      * @returns {String} 
      */
-    static ExtName(pathStr){
+    static ExtName(pathStr, Dot := false){
         temp := pathStr.RemoveRight("\").Split("\")[-1]
         arr := temp.Split(".")
-        return arr[-1]
+        if arr[-1] == ""{
+            return ""
+        }else{
+            return Dot ? "." arr[-1] : arr[-1]
+        }
     }
     
     /**
      * 获取路径中的文件或文件夹名称
      * Gets the name of the file or folder in the path
      * @param {String} PathStr 
-     * @param {String} suffix 可选的要从结果后面去除的内容
+     * @param {String} HasSuffix 是否包含后缀
      * 
-     * path.BaseName("c:\abc\ddd\efs.txt") // "efs.exe"
+     * path.BaseName("c:\abc\ddd\efs.txt") // "efs.txt"
      * 
-     * path.BaseName("c:\abc\ddd\efs.txt", ".txt") // "efs"
+     * path.BaseName("c:\abc\ddd\efs.txt", false) // "efs"
      * @returns {String} 
      */
-    static BaseName(pathStr, suffix := ""){
-       
-        return pathStr.RemoveRight("\").Split("\")[-1].RemoveRight(suffix)
+    static BaseName(pathStr, HasSuffix := true){
+        s := pathStr.RemoveRight("\").Split("\")[-1]
+        return HasSuffix ? s : s.Split(".")[1]
     }
 }

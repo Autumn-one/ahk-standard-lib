@@ -283,4 +283,46 @@ class String extends Primitive{
      * @returns {String} 
      */
     RemoveRight(value: String) => String
+
+    /**
+     * path.Concat的别名,连接路径,这个函数会处理一些一些麻烦情况,路径的最后一定不含\
+     * @param params 
+     * 
+     * "c:\cbs\".ConcatP("\dds") // "c:\cbs\dds"
+     * 
+     * "c:\cbs\".ConcatP("\dds\") // "c:\cbs\dds"
+     * @returns {String} 
+     */
+    ConcatP(params*) => String
+
+    /**
+     * path.DirName的别名,获取路径的文件夹路径
+     * 
+     * "c:\abc\ddd\efs.txt".DirName() // "c:\abc\ddd"
+     * @returns {String} 
+     */
+    DirName() => String
+
+    /**
+     * path.ExtName的别名,获取路径中文件的后缀名
+     * @param dot 
+     * 
+     * "c:\abc\ddd\efs.txt".ExtName() // "txt"
+     * 
+     * "c:\abc\ddd\efs.txt".ExtName(true) // ".txt"
+     * @returns {String} 
+     */
+    ExtName(dot := false) => String
+
+    /**
+     * path.BaseName的别名,获取路径中的文件或文件夹名称
+     * @param HasSuffix 是否包含后缀名
+     * 
+     * "c:\abc\ddd\efs.txt".BaseName() // "efs.txt"
+     * 
+     * "c:\abc\ddd\efs.txt".BaseName(false) // "efs"
+     * @returns {String} 
+     */
+    BaseName(HasSuffix := true) => String
+
 }

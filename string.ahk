@@ -3,7 +3,7 @@
 #Include utils.ahk
 ;@include "en\string.d.ahk"
 ;@include "zh\string.d.ahk"
-
+#Include path.ahk
 __StrTemp(str, vars*)
 {
     for var in vars
@@ -47,6 +47,12 @@ __DefProp("".Base, 'Templ', {Call: __StrTemp})
 __DefProp("".Base, 'Remove', {Call: (str, value) => value == "" ? str : StrReplace(str, value, unset, true)})
 __DefProp("".Base, 'RemoveLeft', {Call: __StrRemoveLeft})
 __DefProp("".Base, 'RemoveRight', {Call: __StrRemoveRight})
+
+; path相关的方法
+__DefProp("".Base, 'ConcatP', {Call: (str, params*) => path.Concat(str,params*)})
+__DefProp("".Base, 'DirName', {Call: (str) => path.DirName(str)})
+__DefProp("".Base, 'ExtName', {Call: (str, dot := false) => path.ExtName(str, dot)})
+__DefProp("".Base, 'BaseName', {Call: (str, HasSuffix := true) => path.BaseName(str, HasSuffix)})
 
 __StrRemoveLeft(str, value){
     if value == "" {
