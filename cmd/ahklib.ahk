@@ -6,6 +6,7 @@ SetWorkingDir A_ScriptDir
 ; 定义管理器的版本
 ahklib_version := "0.5"
 
+isChinese := GetLocaleLanguage() = "zh-CN"
 
 full_command_line := DllCall("GetCommandLine", "str")
 
@@ -44,7 +45,7 @@ try {
         builtInEverything := true
         Everything.RunEverything()
         Everything.GetAllDir("123")
-        FileAppend "正在初始化Everything`n", "*"
+        println(isChinese ? "正在初始化Everything" : "Initializing Everything")
         Sleep(1000)
         if !Everything.IsDBLoaded() {
             count := 0
@@ -57,7 +58,7 @@ try {
             }
             Everything.GetAllDir("123")
             if !Everything.IsDBLoaded(){
-                msgbox "everything初始化失败,请自行安装并重启软件"
+                msgbox isChinese ? "everything初始化失败,请自行安装并重启软件" : "everything initialization failed. Please install and restart the software yourself"
                 return
             }
         
@@ -82,7 +83,7 @@ if builtInEverything {
 
 dirPath := ""
 if(dirArr.Length != 1){
-    _r := msgbox("我们不能确认你ahk的安装位置,请手动选择AutoHotKey.exe所在目录", "选择目录", "1")
+    _r := msgbox(isChinese ? "我们不能确认你ahk的安装位置,请手动选择AutoHotKey.exe所在目录" : "We cannot confirm your ahk installation location, please manually select the AutoHotKey.exe directory", isChinese ? "选择目录" : "Select Folder", "1")
     if _r == "Cancel"{ ; 如果取消了就算了
         return
     }
@@ -102,11 +103,11 @@ if FileExist(dirPath "\ahklib.zip"){
     FileDelete dirPath "\ahklib.zip"
 }
 
-FileAppend "下载中...", "*"
+println(isChinese ? "ahk标准库下载中..." : "ahk standard library download...")
 try{
     Download("https://codeload.github.com/Autumn-one/ahk-standard-lib/zip/refs/heads/main", dirPath "\ahklib.zip")
 }catch {
-    msgbox "包更新失败,请检查网络!或重试."
+    msgbox isChinese ? "包更新失败,请检查网络!或重试." : "Package update failed, please check the network! Or try again."
     return
 }
 
@@ -139,9 +140,9 @@ if GetLocaleLanguage() = "zh-CN" {
     try DirDelete(path.Concat(dirPath, "Lib\zh"), true)
 }
 if ret.ExitCode == 0{
-    msgbox "ahklib{1}更新成功".format(ahklib_version)
+    msgbox (isChinese ? "ahklib@{1}更新成功" : "ahklib@{1}Update succeeded").format(ahklib_version)
 }else{
-    msgbox "ahklib{1}更新失败:".format(ahklib_version) ret.Output
+    msgbox (isChinese ? "ahklib{1}更新失败:" : "ahklib@{1}Update failed:").format(ahklib_version) ret.Output
 }
 
 
