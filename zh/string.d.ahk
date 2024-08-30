@@ -1,21 +1,69 @@
 /** @extends {#string} */
 class String extends Primitive{
     /**
-     * 将字符串切割成数组 StrSplit方法的别名
+     * 将字符串切割成数组
      * @param {Array, String} Delimiters 一个分隔符或分隔符组成的数组, 不传就是切割成单个字符 
-     * @param {String} OmitChars 一个包含两边要移除的字符组成的字符串, Trim的作用 
-     * @param MaxParts 返回的数组的最大长度, 就是切割多少次
+     * @param SplitCount 切割次数 -1 表示无限次, 0 表示不切割
      * 
-     * str := "木瓜"
      * 
-     * str.Split() // ["木", "瓜"]
+     * "木瓜".Split() // ["木", "瓜"]
      * 
-     * str2 := "金 木 水土  火"
+     * "金 木 水土  火".Split([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
      * 
-     * str.Split([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
+     * "abc.bbc.ddd".Split(".", 1) // ["abc", "bbc.ddd"]
+     * 
+     * "fff".Split() // ["fff"]
+     * 
+     * "abc.".Split(".", 0) // ["abc."]
+     * 
+     * "abc.".Split(".", 1) // ["abc", ""]
+     * 
+     * ".abc".Split(".", 1) // ["", "abc"]
+     * 
      * @returns {Array} 
      */
-	Split(Delimiters?, OmitChars?, MaxParts?) => Array
+	Split(Delimiters?: String, SplitCount?: -1) => Array<String>
+    /**
+     * 从右边开始将字符串切割成数组
+     * @param {Array, String} Delimiters 一个分隔符或分隔符组成的数组, 不传就是切割成单个字符 
+     * @param SplitCount 切割次数 -1 表示无限次, 0 表示不切割
+     * 
+     * 
+     * "木瓜".SplitRight() // ["木", "瓜"]
+     * 
+     * "金 木 水土  火".SplitRight([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
+     * 
+     * "abc.bbc.ddd".SplitRight(".", 1) // ["abc.bbc", "ddd"]
+     * 
+     * @returns {Array} 
+     */
+    SplitRight(Delimiters?: String, SplitCount?: -1) => Array<String>
+
+    /**
+     * 如果字符串包含传入参数中的一个项那么返回 True, 否则返回 False
+     * @param params* 
+     * 
+     * "金木水火土".IncludeSome("金", "银") // True
+     * 
+     * "木瓜".IncludeSome("大", "天", "子") // False
+     * 
+     * @returns {Integer} Boolean
+     */
+    IncludeSome(params*) => Integer
+
+    /**
+     * 如果字符串包含传入参数中的所有项那么返回True, 否则返回False
+     * @param params* 
+     * 
+     * "金木水火土".IncludeEvery("金", "火") // True
+     * 
+     * "西瓜".IncludeEvery("瓜", "白") // False
+     * 
+     * @returns {Integer} Boolean
+     */
+    IncludeEvery(params*) => Integer
+
+
     /**
      * 获取字符串的长度
      */

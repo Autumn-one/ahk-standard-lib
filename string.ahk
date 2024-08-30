@@ -17,10 +17,13 @@ __DefProp := {}.DefineProp
 __DefProp("".Base, '__Enum', {Call: __StrEnum})
 __DefProp("".Base, '__Item', {get: __StrItemGet, set: __StrItemSet})
 __DefProp("".Base, 'Split', {Call: __StrSplit})
+__DefProp("".Base, 'SplitRight', {Call: __StrSplitRight})
 __DefProp("".Base, 'Length', {get: __StrLength})
 __DefProp("".Base, 'StartsWith', {Call: __StrStartsWith})
 __DefProp("".Base, 'EndsWith', {Call: __StrEndsWith})
 __DefProp("".Base, 'Includes', {Call: __StrIncludes})
+__DefProp("".Base, 'IncludeSome', {Call: __StrIncludeSome})
+__DefProp("".Base, 'IncludeEvery', {Call: __StrIncludeEvery})
 __DefProp("".Base, 'IndexOf', {Call: __StrIndexOf})
 __DefProp("".Base, 'IndexOfAll', {Call: __StrIndexOfAll})
 __DefProp("".Base, 'LastIndexOf', {Call: __StrLastIndexOf})
@@ -176,8 +179,30 @@ __StrToCodes(str){
     return newArr
 }
 
-__StrSplit(str, params*){
-    return StrSplit(str, params*)
+__StrSplit(str, separator, count := -1){
+    if count != -1{
+        count++
+    }
+    return StrSplit(str, separator, unset, count)
+}
+
+__StrSplitRight(str, seqator, count := -1){
+    if count == 0 {
+        return [str]
+    }
+    /**@type {Array<String>} */
+    arr := str.Split(seqator)
+    if count == -1 {
+        return arr
+    }
+    newArr := []
+    loop arr.Length {
+        if A_Index <= count {
+            newArr.UnShift(arr.Pop())
+        }
+    }
+    (arr.length != 0) && newArr.UnShift(arr.Join(seqator))
+    return newArr
 }
 
 __StrLength(str){
@@ -194,6 +219,14 @@ __StrEndsWith(str, endStr, caseSense := true){
 
 __StrIncludes(str, v, caseSense:= true){
     return InStr(str, v, caseSense) != 0
+}
+
+__StrIncludeSome(str, params*){
+    return params.Some(item => str.Includes(item), true)
+}
+
+__StrIncludeEvery(str, params*){
+    return params.Every(item => str.Includes(item), true)
 }
 
 __StrIndexOf(str, v, caseSense := true){

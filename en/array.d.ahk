@@ -282,4 +282,28 @@ class Array<T = Any> {
      * @returns {Any} 
      */
     ReduceRight(ReduceFunc, initial?) => Any
+
+     /**
+     * Return True if the array contains an item of the passed argument, False otherwise
+     * @param params* 
+     * 
+     * [1,2,3].IncludeSome(2, 6) // True
+     * 
+     * [1,2,3].IncludeSome(8, 9) // False
+     * 
+     * @returns {Integer} Boolean
+     */
+     IncludeSome(params*) => Integer
+
+     /**
+      * Return True if the array contains all the items in the passed argument, False otherwise
+      * @param params*
+      * 
+      * [1,2,3].IncludeEvery(1,2) // True
+      * 
+      * [1,2,3].IncludeEvery(1,6) // False
+      *  
+      * @returns {Integer} Boolean
+      */
+     IncludeEvery(params*) => Integer
 }

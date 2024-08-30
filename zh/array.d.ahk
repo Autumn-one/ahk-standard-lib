@@ -267,6 +267,7 @@ class Array<T = Any> {
      * [1,2,3].Reduce((memo, item) => memo + item) // 1 + 2 + 3 = 6
      * 
      * [1,2,3].Reduce((memo, item) => memo + item, 6) // 6 + 1 + 2 + 3 = 12
+     * 
      * @returns {Any} 
      */
     Reduce(ReduceFunc, initial?) => Any
@@ -279,7 +280,32 @@ class Array<T = Any> {
      * [1,2,3].ReduceRight((memo, item) => memo + item) // 3 + 2 + 1 = 6
      * 
      * [1,2,3].ReduceRight((memo, item) => memo + item, 6) // 6 + 3 + 2 + 1 = 12
+     * 
      * @returns {Any} 
      */
     ReduceRight(ReduceFunc, initial?) => Any
+
+    /**
+     * 如果数组包含传入参数中的一个项那么返回 True, 否则返回 False
+     * @param params* 
+     * 
+     * [1,2,3].IncludeSome(2, 6) // True
+     * 
+     * [1,2,3].IncludeSome(8, 9) // False
+     * 
+     * @returns {Integer} Boolean
+     */
+    IncludeSome(params*) => Integer
+
+    /**
+     * 如果数组包含传入参数中的所有项那么返回True, 否则返回False
+     * @param params*
+     * 
+     * [1,2,3].IncludeEvery(1,2) // True
+     * 
+     * [1,2,3].IncludeEvery(1,6) // False
+     *  
+     * @returns {Integer} Boolean
+     */
+    IncludeEvery(params*) => Integer
 }

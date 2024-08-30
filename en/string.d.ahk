@@ -1,21 +1,68 @@
 /** @extends {#string} */
 class String extends Primitive{
     /**
-     * Cuts a string into an alias for the array StrSplit method
+     * Cut a string into an array
      * @param {Array, String} Delimiters A delimiter or array of delimiters that is not passed is cut into a single character
-     * @param {String} OmitChars A string containing the characters to be removed on both sides, the role of Trim
-     * @param MaxParts The maximum length of the returned array is the number of cuts
+     * @param SplitCount Number of cuts -1 indicates an unlimited number of cuts, and 0 indicates no cuts
      * 
-     * str := "木瓜"
      * 
-     * str.Split() // ["木", "瓜"]
+     * "木瓜".Split() // ["木", "瓜"]
      * 
-     * str2 := "金 木 水土  火"
+     * "金 木 水土  火".Split([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
      * 
-     * str.Split([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
+     * "abc.bbc.ddd".Split(".", 1) // ["abc", "bbc.ddd"]
+     * 
+     * "fff".Split() // ["fff"]
+     * 
+     * "abc.".Split(".", 0) // ["abc."]
+     * 
+     * "abc.".Split(".", 1) // ["abc", ""]
+     * 
+     * ".abc".Split(".", 1) // ["", "abc"]
+     * 
      * @returns {Array} 
      */
-	Split(Delimiters?, OmitChars?, MaxParts?) => Array
+	Split(Delimiters?: String, SplitCount?: -1) => Array<String>
+    /**
+     * Cut the string into an array starting from the right
+     * @param {Array, String} Delimiters A delimiter or array of delimiters that is not passed is cut into a single character
+     * @param SplitCount Number of cuts -1 indicates an unlimited number of cuts, and 0 indicates no cuts
+     * 
+     * 
+     * "木瓜".SplitRight() // ["木", "瓜"]
+     * 
+     * "金 木 水土  火".SplitRight([A_Space, A_Tab]) // ["金", "木", "水土", "火"]
+     * 
+     * "abc.bbc.ddd".SplitRight(".", 1) // ["abc.bbc", "ddd"]
+     * 
+     * @returns {Array} 
+     */
+    SplitRight(Delimiters?: String, SplitCount?: -1) => Array<String>
+
+    /**
+     * Return True if the string contains an item of the passed argument, False otherwise
+     * @param params* 
+     * 
+     * "金木水火土".IncludeSome("金", "银") // True
+     * 
+     * "木瓜".IncludeSome("大", "天", "子") // False
+     * 
+     * @returns {Integer} Boolean
+     */
+    IncludeSome(params*) => Integer
+
+    /**
+     * Return True if the string contains all the items in the passed argument, False otherwise
+     * @param params* 
+     * 
+     * "金木水火土".IncludeEvery("金", "火") // True
+     * 
+     * "西瓜".IncludeEvery("瓜", "白") // False
+     * 
+     * @returns {Integer} Boolean
+     */
+    IncludeEvery(params*) => Integer
+    
     /**
      * Gets the length of the string
      */

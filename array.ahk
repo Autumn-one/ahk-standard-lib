@@ -22,6 +22,8 @@ __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([].Base).DefineProp("Find", { Call: __ArrayFind})
 ([].Base).DefineProp("FindAll", { Call: __ArrayFindAll})
 ([].Base).DefineProp("Includes", { Call: __ArrayIncludes})
+([].Base).DefineProp("IncludeSome", { Call: __ArrayIncludeSome})
+([].Base).DefineProp("IncludeEvery", { Call: __ArrayIncludeEvery})
 ([].Base).DefineProp("IndexOf", { Call: __ArrayIndexOf})
 ([].Base).DefineProp("IndexOfAll", { Call: __ArrayIndexOfAll})
 ([].Base).DefineProp("Flat", { Call: __ArrayFlat})
@@ -227,6 +229,14 @@ __ArrayIncludes(arr, value){
         }
     }
     return false
+}
+
+__ArrayIncludeSome(arr, params*){
+    return params.Some(item => arr.Includes(item), true)
+}
+
+__ArrayIncludeEvery(arr, params*){
+    return params.Every(item => arr.Includes(item), true)
 }
 
 __ArrayIndexOf(arr, value){
