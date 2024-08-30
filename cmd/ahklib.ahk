@@ -4,7 +4,7 @@ SetWorkingDir A_ScriptDir
 #Include ../stdlib.ahk
 
 ; 定义管理器的版本
-ahklib_version := "0.5"
+ahklib_version := "v0.6"
 
 isChinese := GetLocaleLanguage() = "zh-CN"
 
