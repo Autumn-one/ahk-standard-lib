@@ -28,6 +28,11 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     }
     ExitApp
 }
+
+; 检查编码
+if (encode := DllCall("GetConsoleOutputCP")) != 0 && encode != 65001{
+    DllCall("SetConsoleOutputCP", "UInt", 65001)
+}
 ; 如果当前运行的目录不是system32目录那么就复制一份过去
 if !A_ScriptDir.Includes("C:\Windows\System32") {
     FileCopy A_ScriptFullPath, "C:\Windows\System32\",1
