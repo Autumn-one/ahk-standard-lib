@@ -81,7 +81,7 @@ __ObjectToString(obj){
         o := o.Concat(
             k,
             ": ",
-            type(v) == "String" ? v.wrap('"') : v,
+            type(v) == "String" ? v.wrap('"') : String(v),
             ", "
         )
     }
