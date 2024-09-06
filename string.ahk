@@ -277,7 +277,7 @@ __StrCharCodeAt(str, i){
 __StrConcat(str, params*){
     o := str
     for item in params {
-        o := o . item.ToString()
+        o := o . item
     }
     return o
 }

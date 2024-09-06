@@ -10,11 +10,11 @@ println(params*){
     lastChar := params.Pop()
     for item in params {
         output := output.Concat(
-            item.ToString(),
+            String(item),
              " "
         )
     }
-    output := output.Concat(lastChar.ToString(), "`n")
+    output := output.Concat(String(lastChar), "`n")
     ; FileAppend output, "*"
     FileAppend output, "*", "utf-8"
 }
@@ -29,9 +29,9 @@ print(params*){
     }
     lastChar := params.Pop()
     for item in params {
-        FileAppend item.ToString() " ", "*", "utf-8" 
+        FileAppend String(item) " ", "*", "utf-8" 
     }
-    FileAppend lastChar.ToString(), "*", "utf-8"
+    FileAppend String(lastChar), "*", "utf-8"
 }
 
 OpenConsole(){
