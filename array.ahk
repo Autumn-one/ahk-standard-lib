@@ -6,7 +6,9 @@
 __OriginArrayItem := ObjGetBase([]).GetOwnPropDesc("__Item")
 ([]).Base.DefineProp("RawGet", { Call: (arr, index) => __OriginArrayItem.get.bind(arr)(index) })
 ([]).Base.DefineProp("RawSet", { Call: (arr, value, index) => ( __OriginArrayItem.set.bind(arr)(value, index)) })
-([]).Base.DefineProp("__Item", { get: __ArrayItemGet, set: __ArrayItemSet})
+if !IsSet(UIA){
+    ([]).Base.DefineProp("__Item", { get: __ArrayItemGet, set: __ArrayItemSet})
+}
 
 ([].Base).DefineProp("Join", { Call: __ArrayJoin})
 ([].Base).DefineProp("Map", { Call: __ArrayMap})
