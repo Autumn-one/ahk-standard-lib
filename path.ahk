@@ -12,8 +12,12 @@ class path{
      */
     static Concat(params*){
         output := ""
-        prevEndBias := true
+        prevEndBias := true ; 上一个是否以反斜杠结尾
         for item in params {
+            ; 解决相对路径的拼接问题,例如 .\
+            if item.StartsWith(".\") {
+                item := item[2, -1]
+            }
             if prevEndBias {
                 output := item.StartsWith("\") ? output.Concat(item[2, -1]) : output.Concat(item)
             }else{
