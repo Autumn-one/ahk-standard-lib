@@ -1,0 +1,12 @@
+{
+    "name": "ahk-stdlib",
+    "version": "0.0.3",
+    "description": "autohotkey语言的标准库,目标是提供更好的数据结构操作体验.项目开源,欢迎参与.",
+    "main": "stdlib.ahk",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": ["AutoHotkey", "AHK", "stdlib"],
+    "author": "Autumn-one",
+    "license": "ISC"
+}
