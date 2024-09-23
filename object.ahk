@@ -31,8 +31,17 @@ __ObjectHas(obj, prop){
     return obj.HasOwnProp(prop)
 }
 
-__ObjectContains(obj, prop){
-    return obj.HasOwnProp(prop)
+__ObjectContains(obj, prop, cases := true){ ; cases 表示是否大小写敏感
+    if cases {
+        return obj.HasOwnProp(prop)
+    }
+    for key, _ in obj {
+        if prop = key {
+            return
+        }
+    }
+    return false
+    
 }
 
 __ObjectEnum(obj, paramNum){
