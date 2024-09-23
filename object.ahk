@@ -37,7 +37,7 @@ __ObjectContains(obj, prop, cases := true){ ; cases 表示是否大小写敏感
     }
     for key, _ in obj {
         if prop = key {
-            return
+            return true
         }
     }
     return false
